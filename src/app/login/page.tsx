@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 export default function LoginPage() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -43,15 +45,23 @@ export default function LoginPage() {
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
           />
+          <div className="flex justify-between">
+            <label className="text-red-500 text-xs cursor-pointer hover:underline">
+              Change Password
+            </label>
+            <label className="text-red-500 text-xs cursor-pointer hover:underline">
+              Forget Password
+            </label>
+          </div>
           <button
             type="submit"
             disabled={loading}
@@ -60,6 +70,14 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Sign In"}
           </button>
         </form>
+        <button
+          type="button"
+          onClick={() => router.push("/register")}
+          className="mt-2 bg-green-600 hover:bg-green-700 text-white font-bold py-2 rounded"
+          style={{ width: "100%" }}
+        >
+          Sign up
+        </button>
       </div>
     </div>
   );
