@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { showAlertError } from "../utils/sweetAlert";
+import axios from "axios";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -58,25 +59,26 @@ export default function RegisterPage() {
       profileImage: profileImage ? profileImage : null, // กรณีมีการเลือกโปรไฟล์ภาพ
     };
 
-    const jsonData = JSON.stringify(dataToSend);
+    try {
+      // ส่งข้อมูลในรูปแบบ JSON
+      const res = await axios.post("/api/register", dataToSend);
 
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // บอกว่าเราจะส่งข้อมูลในรูปแบบ JSON
-      },
-      body: jsonData, // ส่งข้อมูล JSON
-    });
-
-    if (res.ok) {
-      showAlertError("success", "ลงทะเบียนสำเร็จ", "กรุณาเข้าสู่ระบบ");
-      router.push("/login");
-    } else {
-      showAlertError(
-        "error",
-        "ลงทะเบียนไม่สำเร็จ",
-        "กรุณาตรวจสอบและลองใหม่อีกครั้ง"
-      );
+      if (res.status === 201) {
+        showAlertError("success", "ลงทะเบียนสำเร็จ", "กรุณาเข้าสู่ระบบ");
+        router.push("/login");
+      }
+    } catch (error) {
+      if (error.response) {
+        // เซิร์ฟเวอร์ตอบกลับเป็น error
+        showAlertError(
+          "error",
+          "ลงทะเบียนไม่สำเร็จ",
+          "กรุณาตรวจสอบและลองใหม่อีกครั้ง"
+        );
+      } else {
+        // ถ้ามีข้อผิดพลาดอื่น ๆ เช่น การเชื่อมต่อไม่สำเร็จ
+        showAlertError("error", "เกิดข้อผิดพลาด", "โปรดลองอีกครั้ง");
+      }
     }
   };
 

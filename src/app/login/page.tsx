@@ -2,6 +2,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { showAlertError } from "../utils/sweetAlert";
 export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -20,13 +21,17 @@ export default function LoginPage() {
 
       const token = res.data.token;
       localStorage.setItem("authToken", token);
-      alert("✅ Login สำเร็จ!");
 
-      // ✅ redirect ไปหน้าอื่น (เช่น dashboard)
+      // ✅ แสดงข้อความสำเร็จจาก Swal
+      await showAlertError("success", "Login สำเร็จ!", "");
+
+      // ✅ เมื่อผู้ใช้กด "ตกลง" แล้ว ทำการ redirect ไปหน้า dashboard
       window.location.href = "/dashboard";
     } catch (err: any) {
-      alert(
-        "❌ Login ไม่สำเร็จ: " + err.response?.data?.message || err.message
+      showAlertError(
+        "error",
+        "Login ไม่สำเร็จ",
+        err.response?.data?.message || err.message
       );
     } finally {
       setLoading(false);
@@ -45,14 +50,14 @@ export default function LoginPage() {
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            className="border rounded px-4 py-2 focus:outline-none text-black"
           />
           <input
             type="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            className="border rounded px-4 py-2 focus:outline-none text-black"
           />
           <div className="flex justify-between">
             <label className="text-red-500 text-xs cursor-pointer hover:underline">
