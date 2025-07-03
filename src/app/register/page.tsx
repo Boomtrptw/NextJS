@@ -43,9 +43,9 @@ export default function RegisterPage() {
 
     if (Object.values(formErrors).includes(true)) {
       if (formErrors.password || formErrors.confirmPassword) {
-        showAlertError("error", "Password ไม่ตรงกัน", "กรุณาตรวจสอบอีกครั้ง");
+        showAlertError("warning", "Password ไม่ตรงกัน", "กรุณาตรวจสอบอีกครั้ง");
       } else if (formErrors.email) {
-        showAlertError("error", "E-mail ไม่ถูกต้อง", "กรุณาตรวจสอบอีกครั้ง");
+        showAlertError("warning", "E-mail ไม่ถูกต้อง", "กรุณาตรวจสอบอีกครั้ง");
       }
       return;
     }
@@ -112,7 +112,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-800 to-black">
       <div
         className="bg-white p-8 rounded-lg shadow-lg"
         style={{ width: "750px" }}

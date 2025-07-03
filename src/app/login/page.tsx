@@ -3,10 +3,12 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { showAlertError } from "../utils/sweetAlert";
+import { EyeIcon } from "@heroicons/react/24/outline";
 export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -52,15 +54,30 @@ export default function LoginPage() {
             onChange={(e) => setUsername(e.target.value)}
             className="border rounded px-4 py-2 focus:outline-none text-black"
           />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border rounded px-4 py-2 focus:outline-none text-black"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border rounded px-4 py-2 focus:outline-none text-black w-full"
+            />
+            <div
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            >
+              <EyeIcon
+                className={`h-5 w-5 text-gray-500 ${
+                  showPassword ? "text-gray-800" : "text-gray-500"
+                }`}
+              />
+            </div>
+          </div>
           <div className="flex justify-between">
-            <label className="text-red-500 text-xs cursor-pointer hover:underline">
+            <label
+              className="text-red-500 text-xs cursor-pointer hover:underline"
+              onClick={() => router.push("/change-password")}
+            >
               Change Password
             </label>
             <label className="text-red-500 text-xs cursor-pointer hover:underline">
