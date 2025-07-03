@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     const user = userQuery.rows[0]; // ค่าผู้ใช้ที่ค้นพบ
 
     if (!user) {
-      return NextResponse.json({ message: "ไม่พบผู้ใช้นี้" }, { status: 400 });
+      return NextResponse.json({ message: "ไม่พบผู้ใช้นี้" }, { status: 404 });
     }
 
     // เปรียบเทียบรหัสผ่านเดิม
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     if (!isPasswordValid) {
       return NextResponse.json(
         { message: "รหัสผ่านเดิมไม่ถูกต้อง" },
-        { status: 400 }
+        { status: 403 }
       );
     }
 

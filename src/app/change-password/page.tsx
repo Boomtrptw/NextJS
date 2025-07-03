@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { showAlertError } from "../utils/sweetAlert";
+import { EyeIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 
 export default function ChangePasswordPage() {
@@ -17,12 +18,15 @@ export default function ChangePasswordPage() {
     confirmNewPassword: false,
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const router = useRouter();
 
   const handleChangePassword = async (e) => {
-    e.preventDefault(); // Prevent the form from submitting if validation fails
+    e.preventDefault();
 
-    // Validation to check if any fields are empty
     let formErrors = {
       username: !username,
       password: !password,
@@ -32,7 +36,6 @@ export default function ChangePasswordPage() {
 
     setErrors(formErrors);
 
-    // If any field has an error (empty or mismatch), show alert and stop submission
     if (Object.values(formErrors).includes(true)) {
       if (formErrors.confirmNewPassword) {
         showAlertError("warning", "Password ไม่ตรงกัน", "");
@@ -49,7 +52,6 @@ export default function ChangePasswordPage() {
     };
 
     try {
-      // ส่งข้อมูลในรูปแบบ JSON
       const res = await axios.post("/api/change-password", dataToSend, {
         headers: { "Content-Type": "application/json" },
       });
@@ -57,6 +59,10 @@ export default function ChangePasswordPage() {
       if (res.status === 200) {
         showAlertError("success", "เปลี่ยน Password สำเร็จ", "");
         router.push("/login");
+      } else if (res.status === 404) {
+        showAlertError("info", "ไม่พบ Username นี้ในระบบ", "");
+      } else if (res.status === 403) {
+        showAlertError("info", "รหัสผ่านเดิมไม่ถูกต้อง", "");
       } else {
         showAlertError(
           "error",
@@ -91,6 +97,12 @@ export default function ChangePasswordPage() {
       setConfirmNewPassword(e.target.value);
   };
 
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleNewPasswordVisibility = () =>
+    setShowNewPassword(!showNewPassword);
+  const toggleConfirmPasswordVisibility = () =>
+    setShowConfirmPassword(!showConfirmPassword);
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-800 to-black">
       <div
@@ -113,38 +125,66 @@ export default function ChangePasswordPage() {
             } text-black rounded-md focus:outline-none`}
           />
 
-          {/* Password */}
-          <input
-            type="password"
-            placeholder="Current Password"
-            value={password}
-            onChange={(e) => handleInputChange(e, "password")}
-            className={`w-full p-2 border ${
-              errors.password ? "border-red-500" : "border-gray-300"
-            } text-black rounded-md focus:outline-none`}
-          />
+          <div className="space-y-4">
+            {/* Current Password */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Current Password"
+                value={password}
+                onChange={(e) => handleInputChange(e, "password")}
+                className={`w-full p-2 border ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                } text-black rounded-md focus:outline-none`}
+              />
+              <EyeIcon
+                className={`h-5 w-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer ${
+                  showPassword ? "text-gray-800" : "text-gray-500"
+                }`}
+                onClick={togglePasswordVisibility}
+              />
+            </div>
 
-          {/* New Password */}
-          <input
-            type="password"
-            placeholder="New Password"
-            value={newPassword}
-            onChange={(e) => handleInputChange(e, "newPassword")}
-            className={`w-full p-2 border ${
-              errors.newPassword ? "border-red-500" : "border-gray-300"
-            } text-black rounded-md focus:outline-none`}
-          />
+            {/* New Password */}
+            <div className="relative">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => handleInputChange(e, "newPassword")}
+                className={`w-full p-2 border ${
+                  errors.newPassword ? "border-red-500" : "border-gray-300"
+                } text-black rounded-md focus:outline-none`}
+              />
+              <EyeIcon
+                className={`h-5 w-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer ${
+                  showNewPassword ? "text-gray-800" : "text-gray-500"
+                }`}
+                onClick={toggleNewPasswordVisibility}
+              />
+            </div>
 
-          {/* Confirm New Password */}
-          <input
-            type="password"
-            placeholder="Confirm New Password"
-            value={confirmNewPassword}
-            onChange={(e) => handleInputChange(e, "confirmNewPassword")}
-            className={`w-full p-2 border ${
-              errors.confirmNewPassword ? "border-red-500" : "border-gray-300"
-            } text-black rounded-md focus:outline-none`}
-          />
+            {/* Confirm New Password */}
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm New Password"
+                value={confirmNewPassword}
+                onChange={(e) => handleInputChange(e, "confirmNewPassword")}
+                className={`w-full p-2 border ${
+                  errors.confirmNewPassword
+                    ? "border-red-500"
+                    : "border-gray-300"
+                } text-black rounded-md focus:outline-none`}
+              />
+              <EyeIcon
+                className={`h-5 w-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer ${
+                  showConfirmPassword ? "text-gray-800" : "text-gray-500"
+                }`}
+                onClick={toggleConfirmPasswordVisibility}
+              />
+            </div>
+          </div>
 
           {/* Change Password Button */}
           <button
