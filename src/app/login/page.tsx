@@ -2,11 +2,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { setLoginCookie } from "@/app/utils/cookieLogin";
 import { showAlertError } from "../utils/sweetAlert";
 import { EyeIcon } from "@heroicons/react/24/outline";
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
+  const [user, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -17,12 +18,16 @@ export default function LoginPage() {
 
     try {
       const res = await axios.post("/api/login", {
-        username,
+        user,
         password,
       });
 
       const token = res.data.token;
       localStorage.setItem("authToken", token);
+
+      // ✅ เก็บข้อมูล user ลง cookie
+      const { username, first_name, last_name, email } = res.data.user;
+      setLoginCookie({ username, first_name, last_name, email });
 
       // ✅ แสดงข้อความสำเร็จจาก Swal
       await showAlertError("success", "Login สำเร็จ!", "");
@@ -50,7 +55,7 @@ export default function LoginPage() {
           <input
             type="text"
             placeholder="Username"
-            value={username}
+            value={user}
             onChange={(e) => setUsername(e.target.value)}
             className="border rounded px-4 py-2 focus:outline-none text-black"
           />

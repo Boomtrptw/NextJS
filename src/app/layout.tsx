@@ -1,4 +1,5 @@
 import './globals.css'
+import AppLayout from './AppLayout';
 
 export const metadata = {
   title: 'My Next JS',
@@ -8,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AppLayout>{children}</AppLayout>
+      </body>
     </html>
-  )
+  );
 }
