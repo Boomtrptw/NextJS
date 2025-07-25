@@ -91,6 +91,32 @@ export default function DashboardPage() {
         borderWidth: 2,
       },
     ],
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: true,
+          text: "กราฟแสดงคะแนนเฉลี่ยในแต่ละปี (%)",
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          grid: {
+            display: false,
+          },
+          min: 0,
+          max: 100,
+        },
+      },
+    },
   };
 
   const bestYear = [2563, 2564, 2565, 2566].reduce((bestYear, year) => {
@@ -114,6 +140,44 @@ export default function DashboardPage() {
         borderWidth: 2,
       },
     ],
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: true,
+          text: `กราฟแสดงคะแนนเฉลี่ยในปี ${bestYear}`,
+        },
+        tooltip: {
+          callbacks: {
+            label: function (context: any) {
+              const label = context.raw;
+              const subjectName = bestYearData[context.dataIndex].subject_name;
+              return `${subjectName}: ${label}`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+          ticks: {
+            autoSkip: true,
+          },
+        },
+        y: {
+          grid: {
+            display: false,
+          },
+          min: 0,
+          max: 4,
+        },
+      },
+    },
   };
 
   const calculateTermGPA = (term: number, year: number) => {
@@ -163,6 +227,32 @@ export default function DashboardPage() {
         tension: 0.1, // ความตึงของเส้น
       },
     ],
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        title: {
+          display: true,
+          text: "กราฟแสดงคะแนนเฉลี่ยในแต่ละเทอม",
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+        },
+        y: {
+          grid: {
+            display: false,
+          },
+          min: 0,
+          max: 4,
+        },
+      },
+    },
   };
 
   const techStackData = data ? data.tech_stack : [];
@@ -177,21 +267,14 @@ export default function DashboardPage() {
     (tech: any) => tech.type === "Database"
   );
 
-  const calculateExpertiseLevel = (techStack: any[]) => {
-    return techStack.reduce((total, tech) => total + tech.expertise_level, 0);
-  };
-
-  const frontendExpertise = calculateExpertiseLevel(frontendTechStack);
-  const backendExpertise = calculateExpertiseLevel(backendTechStack);
-  const databaseExpertise = calculateExpertiseLevel(databaseTechStack);
-
+  const randomColorsFrontend = Array.from({ length: 5 }, getRandomColor);
   const frontendChartData = {
     labels: frontendTechStack.map((tech: any) => tech.name),
     datasets: [
       {
-        data: [frontendExpertise],
-        backgroundColor: [getRandomColor()],
-        borderColor: [getRandomColor()],
+        data: frontendTechStack.map((tech: any) => tech.expertise_level),
+        backgroundColor: randomColorsFrontend,
+        borderColor: randomColorsFrontend,
         borderWidth: 1,
       },
     ],
@@ -199,14 +282,18 @@ export default function DashboardPage() {
       responsive: true,
       plugins: {
         legend: {
+          display: true,
+        },
+        title: {
           display: false,
         },
         tooltip: {
           callbacks: {
             label: function (context: any) {
-              const label = context.raw;
               const subjectName = frontendTechStack[context.dataIndex].name;
-              return `${subjectName}: ความชำนาญ ${label}`;
+              const level =
+                frontendTechStack[context.dataIndex].expertise_level;
+              return `${subjectName}: ความชำนาญ ${level}`;
             },
           },
         },
@@ -214,13 +301,14 @@ export default function DashboardPage() {
     },
   };
 
+  const randomColorsBackend = Array.from({ length: 3 }, getRandomColor);
   const backendChartData = {
     labels: backendTechStack.map((tech: any) => tech.name),
     datasets: [
       {
-        data: [backendExpertise],
-        backgroundColor: [getRandomColor()],
-        borderColor: [getRandomColor()],
+        data: backendTechStack.map((tech: any) => tech.expertise_level),
+        backgroundColor: randomColorsBackend,
+        borderColor: randomColorsBackend,
         borderWidth: 1,
       },
     ],
@@ -228,14 +316,17 @@ export default function DashboardPage() {
       responsive: true,
       plugins: {
         legend: {
+          display: true,
+        },
+        title: {
           display: false,
         },
         tooltip: {
           callbacks: {
             label: function (context: any) {
-              const label = context.raw;
               const subjectName = backendTechStack[context.dataIndex].name;
-              return `${subjectName}: ความชำนาญ ${label}`;
+              const level = backendTechStack[context.dataIndex].expertise_level;
+              return `${subjectName}: ความชำนาญ ${level}`;
             },
           },
         },
@@ -243,13 +334,14 @@ export default function DashboardPage() {
     },
   };
 
+  const randomColorsDatabase = Array.from({ length: 3 }, getRandomColor);
   const databaseChartData = {
     labels: databaseTechStack.map((tech: any) => tech.name),
     datasets: [
       {
-        data: [databaseExpertise],
-        backgroundColor: [getRandomColor()],
-        borderColor: [getRandomColor()],
+        data: databaseTechStack.map((tech: any) => tech.expertise_level),
+        backgroundColor: randomColorsDatabase,
+        borderColor: randomColorsDatabase,
         borderWidth: 1,
       },
     ],
@@ -257,14 +349,18 @@ export default function DashboardPage() {
       responsive: true,
       plugins: {
         legend: {
+          display: true,
+        },
+        title: {
           display: false,
         },
         tooltip: {
           callbacks: {
             label: function (context: any) {
-              const label = context.raw;
               const subjectName = databaseTechStack[context.dataIndex].name;
-              return `${subjectName}: ความชำนาญ ${label}`;
+              const level =
+                databaseTechStack[context.dataIndex].expertise_level;
+              return `${subjectName}: ความชำนาญ ${level}`;
             },
           },
         },
@@ -282,37 +378,7 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold mb-2">คะแนนในแต่ละปี (%)</h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
-              <Bar
-                data={barChartData}
-                options={{
-                  responsive: true,
-                  plugins: {
-                    legend: {
-                      display: false,
-                    },
-                    title: {
-                      display: true,
-                      text: "กราฟแสดงคะแนนเฉลี่ยในแต่ละปี (%)",
-                    },
-                  },
-                  scales: {
-                    x: {
-                      grid: {
-                        display: false, // ไม่แสดงตารางแกน X
-                      },
-                    },
-                    y: {
-                      grid: {
-                        display: false, // ไม่แสดงตารางแกน Y
-                      },
-                      min: 0,
-                      max: 100,
-                    },
-                  },
-                }}
-                height={"100%"}
-                width={null}
-              />
+              <Bar data={barChartData} height={"100%"} width={null} />
             ) : (
               "กำลังโหลด..."
             )}
@@ -323,50 +389,7 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold mb-2">ปีการศึกษาที่ดีที่สุด</h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
-              <Bar
-                data={bestYearChartData}
-                options={{
-                  responsive: true,
-                  plugins: {
-                    legend: {
-                      display: false, // ซ่อน legend
-                    },
-                    title: {
-                      display: true,
-                      text: `กราฟแสดงคะแนนเฉลี่ยในปี ${bestYear}`,
-                    },
-                    tooltip: {
-                      callbacks: {
-                        label: function (context: any) {
-                          const label = context.raw;
-                          const subjectName =
-                            bestYearData[context.dataIndex].subject_name;
-                          return `${subjectName}: ${label}`;
-                        },
-                      },
-                    },
-                  },
-                  scales: {
-                    x: {
-                      grid: {
-                        display: false,
-                      },
-                      ticks: {
-                        autoSkip: true,
-                      },
-                    },
-                    y: {
-                      grid: {
-                        display: false,
-                      },
-                      min: 0,
-                      max: 4,
-                    },
-                  },
-                }}
-                height={"100%"}
-                width={null}
-              />
+              <Bar data={bestYearChartData} height={"100%"} width={null} />
             ) : (
               "กำลังโหลด..."
             )}
@@ -377,37 +400,7 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold mb-2">ภาพรวม 8 เทอม</h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
-              <Line
-                data={chartData}
-                options={{
-                  responsive: true,
-                  plugins: {
-                    legend: {
-                      display: false, // แสดงตำแหน่ง legend ที่ด้านบน
-                    },
-                    title: {
-                      display: true,
-                      text: "กราฟแสดงคะแนนเฉลี่ยในแต่ละเทอม", // ชื่อกราฟ
-                    },
-                  },
-                  scales: {
-                    x: {
-                      grid: {
-                        display: false,
-                      },
-                    },
-                    y: {
-                      grid: {
-                        display: false,
-                      },
-                      min: 0,
-                      max: 4,
-                    },
-                  },
-                }}
-                height={"100%"}
-                width={null}
-              />
+              <Line data={chartData} height={"100%"} width={null} />
             ) : (
               "กำลังโหลด..."
             )}
@@ -419,17 +412,38 @@ export default function DashboardPage() {
           <div className="grid grid-cols-3 gap-4 h-64">
             {/* Frontend Doughnut */}
             <div className="flex justify-center items-center">
-              {data ? <Doughnut data={frontendChartData} /> : "กำลังโหลด..."}
+              {data ? (
+                <Doughnut
+                  data={frontendChartData}
+                  options={frontendChartData.options}
+                />
+              ) : (
+                "กำลังโหลด..."
+              )}
             </div>
 
             {/* Backend Doughnut */}
             <div className="flex justify-center items-center">
-              {data ? <Doughnut data={backendChartData} /> : "กำลังโหลด..."}
+              {data ? (
+                <Doughnut
+                  data={backendChartData}
+                  options={backendChartData.options}
+                />
+              ) : (
+                "กำลังโหลด..."
+              )}
             </div>
 
             {/* Database Doughnut */}
             <div className="flex justify-center items-center">
-              {data ? <Doughnut data={databaseChartData} /> : "กำลังโหลด..."}
+              {data ? (
+                <Doughnut
+                  data={databaseChartData}
+                  options={databaseChartData.options}
+                />
+              ) : (
+                "กำลังโหลด..."
+              )}
             </div>
           </div>
         </div>
