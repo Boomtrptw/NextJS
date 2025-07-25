@@ -378,7 +378,12 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold mb-2">คะแนนในแต่ละปี (%)</h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
-              <Bar data={barChartData} height={"100%"} width={null} />
+              <Bar
+                data={barChartData}
+                options={barChartData.options}
+                height={"100%"}
+                width={null}
+              />
             ) : (
               "กำลังโหลด..."
             )}
@@ -389,7 +394,12 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold mb-2">ปีการศึกษาที่ดีที่สุด</h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
-              <Bar data={bestYearChartData} height={"100%"} width={null} />
+              <Bar
+                data={bestYearChartData}
+                options={bestYearChartData.options}
+                height={"100%"}
+                width={null}
+              />
             ) : (
               "กำลังโหลด..."
             )}
@@ -400,7 +410,12 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold mb-2">ภาพรวม 8 เทอม</h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
-              <Line data={chartData} height={"100%"} width={null} />
+              <Line
+                data={chartData}
+                options={chartData.options}
+                height={"100%"}
+                width={null}
+              />
             ) : (
               "กำลังโหลด..."
             )}
