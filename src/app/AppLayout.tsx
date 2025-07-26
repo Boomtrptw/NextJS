@@ -9,7 +9,7 @@ import { getLoginCookie } from "@/app/utils/cookieLogin";
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const noHeaderFooterPages = ["/login", "/change-password"];
+  const noHeaderFooterPages = ["/login", "/change-password", "/register"];
   const isAuthPage = noHeaderFooterPages.includes(pathname);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);

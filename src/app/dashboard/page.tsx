@@ -369,13 +369,15 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="p-8 bg-gray-100" style={{ height: "90vh" }}>
+    <div className="p-8 bg-gray-100" style={{ height: "88vh" }}>
       <div
         className="grid grid-cols-1 md:grid-cols-2 gap-6"
         style={{ height: "100%" }}
       >
         <div className="bg-white rounded-lg shadow-md p-4">
-          <h2 className="text-xl font-semibold mb-2">คะแนนในแต่ละปี (%)</h2>
+          <h2 className="text-xl font-semibold mb-2" style={{ color: "black" }}>
+            คะแนนในแต่ละปี (%)
+          </h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
               <Bar
@@ -391,7 +393,9 @@ export default function DashboardPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-4">
-          <h2 className="text-xl font-semibold mb-2">ปีการศึกษาที่ดีที่สุด</h2>
+          <h2 className="text-xl font-semibold mb-2" style={{ color: "black" }}>
+            ปีการศึกษาที่ดีที่สุด
+          </h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
               <Bar
@@ -407,7 +411,9 @@ export default function DashboardPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-4">
-          <h2 className="text-xl font-semibold mb-2">ภาพรวม 8 เทอม</h2>
+          <h2 className="text-xl font-semibold mb-2" style={{ color: "black" }}>
+            ภาพรวม 8 เทอม
+          </h2>
           <div className="h-64 rounded flex items-center justify-center">
             {data ? (
               <Line
@@ -423,7 +429,9 @@ export default function DashboardPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-4">
-          <h2 className="text-xl font-semibold mb-2">Tech Stack</h2>
+          <h2 className="text-xl font-semibold mb-2" style={{ color: "black" }}>
+            Tech Stack
+          </h2>
           <div className="grid grid-cols-3 gap-4 h-64">
             {/* Frontend Doughnut */}
             <div className="flex justify-center items-center">
